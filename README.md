@@ -59,6 +59,30 @@ processes had been up since boot (Nov 9, 2026, 11:55):
 Verdict: **QUIET — not affected.** Some systems are fine, which is why you
 measure before you mitigate.
 
+### Field update — Nov 12, 2026: mitigation applied and verified on our own box
+
+We then applied this repo's own workaround to that same system
+(RX 9070 XT, driver 32.0.32015.7029, Patriot P410 2TB) and verified the
+result in the same session:
+
+- **Before:** `AMD External Events Utility` — Status **Running**,
+  StartType **Automatic**
+- **Action:** stop the service and set its StartType to **Disabled**
+  (the tool's `-Mode Disable`)
+- **After (verified):** Status **Stopped**, StartType **Disabled**;
+  neither `atiesrxx.exe` nor `atieclxx.exe` appears in the process list,
+  and the tool's own `-Mode Status` confirms it: service Stopped /
+  Disabled, both EEU processes **NOT RUNNING**
+- **SSD after:** **Healthy**, Wear **0%**, 31 °C — unchanged
+
+Honest note: this system had previously measured **QUIET** (zero EEU
+writes — see the datapoint above), so this was a precaution, not a rescue
+from active damage. We publish it because it is the verifiable before/after
+anyone applying the workaround should end in: the service stops, it stays
+disabled, its processes are gone, and the drive still reports healthy.
+Measure first — if your system shows the bug, this is the state the fix
+leaves you in.
+
 ## Usage
 
 Requires Windows PowerShell 5.1+ (built into Windows 10/11). No
